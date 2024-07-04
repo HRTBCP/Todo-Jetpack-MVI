@@ -2,16 +2,17 @@ package nz.co.plantandfood.todocompose.navigation
 
 import androidx.navigation.NavHostController
 import nz.co.plantandfood.todocompose.util.Action
-import nz.co.plantandfood.todocompose.util.Constants
+import nz.co.plantandfood.todocompose.util.ListScreen
+import nz.co.plantandfood.todocompose.util.TaskScreen
 
 class Screens(navController: NavHostController) {
-    val list: (Action) -> Unit = { action ->
-        navController.navigate("list/${action.name}") {
-            popUpTo(Constants.LIST_SCREEN) { inclusive = true }
+    val navigateToListScreen: (Action) -> Unit = { action ->
+        navController.navigate(ListScreen(action.name)) {
+           // popUpTo(ListScreen) { inclusive = true }
         }
 
     }
-    val task: (Int) -> Unit = { taskId ->
-        navController.navigate("task/$taskId")
+    val navigateToTaskScreen: (Int) -> Unit = { taskId ->
+        navController.navigate(TaskScreen(taskId))
     }
 }

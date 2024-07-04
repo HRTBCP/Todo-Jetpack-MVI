@@ -6,7 +6,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import nz.co.plantandfood.todocompose.navigation.destination.listComposable
 import nz.co.plantandfood.todocompose.navigation.destination.taskComposable
-import nz.co.plantandfood.todocompose.util.Constants
+import nz.co.plantandfood.todocompose.util.Action
+import nz.co.plantandfood.todocompose.util.ListScreen
 
 @Composable
 fun SetupNavigation(
@@ -17,15 +18,10 @@ fun SetupNavigation(
     }
     NavHost(
         navController,
-        startDestination = Constants.LIST_SCREEN
+        startDestination = ListScreen(Action.NO_ACTION.name)
     ) {
-        listComposable(
-            navigateToTaskScreen = screen.task
-        )
-
-        taskComposable (
-            navigateToTaskScreen = screen.list
-        )
+        listComposable(screen.navigateToTaskScreen)
+        taskComposable (screen.navigateToListScreen)
 
     }
 }
