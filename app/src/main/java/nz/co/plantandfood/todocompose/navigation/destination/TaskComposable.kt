@@ -10,14 +10,15 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
+import nz.co.plantandfood.todocompose.navigation.TaskScreenNav
 import nz.co.plantandfood.todocompose.util.Action
-import nz.co.plantandfood.todocompose.util.TaskScreen
+
 
 fun NavGraphBuilder.taskComposable(
     navigateToListScreen: (action:Action) -> Unit
 ) {
-    composable<TaskScreen>(){
-        val taskScreen = it.toRoute<TaskScreen>()
+    composable<TaskScreenNav>(){
+        val taskScreen = it.toRoute<TaskScreenNav>()
         Column(
             modifier = Modifier.fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally,

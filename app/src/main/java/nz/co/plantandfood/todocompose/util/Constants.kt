@@ -8,9 +8,3 @@ object Constants {
 
 
 }
-
-@Serializable
-data class ListScreen(val action: String? =Action.NO_ACTION.name)
-
-@Serializable
-data class TaskScreen(val taskId: Int)
