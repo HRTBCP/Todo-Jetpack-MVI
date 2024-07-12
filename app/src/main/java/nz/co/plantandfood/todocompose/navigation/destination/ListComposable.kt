@@ -17,17 +17,5 @@ fun NavGraphBuilder.listComposable(
             navigateToTaskScreen = navigateToTaskScreen
         )
 
-//        Column(
-//            modifier = Modifier.fillMaxSize(),
-//            horizontalAlignment = Alignment.CenterHorizontally,
-//            verticalArrangement = Arrangement.Center
-//        ) {
-//            Button(onClick = {
-//                navigateToTaskScreen(1)
-//
-//            }) {
-//                Text(text = "Go to task ${listScreen.action}")
-//            }
-//        }
     }
 }
