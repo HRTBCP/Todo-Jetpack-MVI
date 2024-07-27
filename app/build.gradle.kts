@@ -7,11 +7,11 @@ plugins {
 }
 
 android {
-    namespace = "nz.co.plantandfood.todocompose"
+    namespace = "nz.co.plantandfood.mvvmtodoapp"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "nz.co.plantandfood.todocompose"
+        applicationId = "nz.co.plantandfood.mvvmtodoapp"
         minSdk = 24
         targetSdk = 34
         versionCode = 1

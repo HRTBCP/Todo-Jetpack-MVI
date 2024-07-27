@@ -7,7 +7,8 @@ import nz.co.plantandfood.mvvmtodoapp.data.TodoDao
 
 @Database(
     entities = [Todo::class],
-    version = 1
+    version = 1,
+    exportSchema = false
 )
 abstract class TodoDatabase: RoomDatabase() {
 
