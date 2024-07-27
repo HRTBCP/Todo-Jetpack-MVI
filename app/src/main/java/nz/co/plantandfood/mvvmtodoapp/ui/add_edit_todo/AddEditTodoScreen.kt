@@ -16,6 +16,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import nz.co.plantandfood.mvvmtodoapp.util.UiEvent
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -23,7 +24,7 @@ import nz.co.plantandfood.mvvmtodoapp.util.UiEvent
 
 fun AddEditTodoScreen(
     onPopBackStack: () -> Unit,
-    viewModel: AddEditTodoViewModel// = hiltViewModel()
+    viewModel: AddEditTodoViewModel = hiltViewModel()
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
   //  val scaffoldState = rememberScaffoldState()

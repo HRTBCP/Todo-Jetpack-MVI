@@ -17,6 +17,9 @@ kotlinKsp = "1.9.20-1.0.14"
 hiltAndroidCompiler = "2.51.1"
 navigationComposeVersion = "2.8.0-beta04"
 kotlinxSeralization="1.6.3"
+hiltCommon = "1.2.0"
+hiltNavigation = "1.2.0"
+hiltNavigationCompose = "1.2.0"
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
@@ -40,6 +43,9 @@ hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref
 hilt-android-compiler = { group = "com.google.dagger", name = "hilt-android-compiler", version.ref = "hiltAndroidCompiler" }
 navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigationComposeVersion" }
 kotlinx-serialization-json = {module="org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSeralization"}
+androidx-hilt-common = { group = "androidx.hilt", name = "hilt-common", version.ref = "hiltCommon" }
+androidx-hilt-navigation = { group = "androidx.hilt", name = "hilt-navigation", version.ref = "hiltNavigation" }
+androidx-hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "hiltNavigationCompose" }
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
