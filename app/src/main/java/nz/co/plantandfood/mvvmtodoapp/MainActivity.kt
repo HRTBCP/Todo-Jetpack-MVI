@@ -23,16 +23,18 @@ class MainActivity : ComponentActivity() {
                 val navController = rememberNavController()
                 NavHost(
                     navController = navController,
-                    startDestination = Routes.TODO_LIST
+                    startDestination = Routes.todo_list_obj
                 ) {
                     composable<Routes.todo_list_obj> {
                         TodoListScreen(
                             onNavigate = {
+                                //navigate to instance oft todo_list_obj
                                 navController.navigate(it.route)
                             }
                         )
                     }
                     composable <Routes.add_edit_todo> {
+                        //  val taskScreen = it.toRoute<TaskScreenNav>()
                         AddEditTodoScreen(onPopBackStack = {
                             navController.popBackStack()
                         })

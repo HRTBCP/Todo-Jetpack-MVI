@@ -1,8 +1,12 @@
 package nz.co.plantandfood.mvvmtodoapp.util
 
+import kotlinx.serialization.Serializable
+
 object Routes {
-    const val TODO_LIST = "todo_list"
-    const val ADD_EDIT_TODO = "add_edit_todo"
+
+    @Serializable
     object todo_list_obj
-    data class add_edit_todo(val todoId: Int? = null)
+
+    @Serializable
+    data class add_edit_todo(val todoId: Int = -1)
 }
