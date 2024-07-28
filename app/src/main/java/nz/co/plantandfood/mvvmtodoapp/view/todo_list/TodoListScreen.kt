@@ -1,4 +1,4 @@
-package nz.co.plantandfood.mvvmtodoapp.ui.todo_list
+package nz.co.plantandfood.mvvmtodoapp.view.todo_list
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.clickable

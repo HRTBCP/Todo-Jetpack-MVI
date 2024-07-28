@@ -8,9 +8,9 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import nz.co.plantandfood.mvvmtodoapp.ui.add_edit_todo.AddEditTodoScreen
-import nz.co.plantandfood.mvvmtodoapp.ui.theme.MVVMTodoAppTheme
-import nz.co.plantandfood.mvvmtodoapp.ui.todo_list.TodoListScreen
+import nz.co.plantandfood.mvvmtodoapp.view.add_edit_todo.AddEditTodoScreen
+import nz.co.plantandfood.mvvmtodoapp.view.theme.MVVMTodoAppTheme
+import nz.co.plantandfood.mvvmtodoapp.view.todo_list.TodoListScreen
 import nz.co.plantandfood.mvvmtodoapp.util.Routes
 import dagger.hilt.android.AndroidEntryPoint
 

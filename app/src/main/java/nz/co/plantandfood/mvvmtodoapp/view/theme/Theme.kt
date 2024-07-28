@@ -1,4 +1,4 @@
-package nz.co.plantandfood.mvvmtodoapp.ui.theme
+package nz.co.plantandfood.mvvmtodoapp.view.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme

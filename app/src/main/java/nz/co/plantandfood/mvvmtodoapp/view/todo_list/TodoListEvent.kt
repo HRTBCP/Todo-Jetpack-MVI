@@ -1,4 +1,4 @@
-package nz.co.plantandfood.mvvmtodoapp.ui.todo_list
+package nz.co.plantandfood.mvvmtodoapp.view.todo_list
 
 import nz.co.plantandfood.mvvmtodoapp.data.Todo
 

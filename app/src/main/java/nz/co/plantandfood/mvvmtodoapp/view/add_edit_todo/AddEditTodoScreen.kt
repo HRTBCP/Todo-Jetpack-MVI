@@ -1,4 +1,4 @@
-package nz.co.plantandfood.mvvmtodoapp.ui.add_edit_todo
+package nz.co.plantandfood.mvvmtodoapp.view.add_edit_todo
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.*
