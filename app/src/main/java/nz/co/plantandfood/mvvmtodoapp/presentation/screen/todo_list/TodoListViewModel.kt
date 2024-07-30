@@ -28,13 +28,13 @@ class TodoListViewModel @Inject constructor(
         when(action) {
             is TodoListAction.OnTodoClick -> {
               action.todo.id?.let {
-                    sendUiEvent(UiEvent.Navigate(Routes.add_edit_todo(it)))
+                    sendUiEvent(UiEvent.Navigate(Routes.TodoEdit(it)))
                 }
 
 
             }
             is TodoListAction.OnAddTodoClick -> {
-                sendUiEvent(UiEvent.Navigate(Routes.add_edit_todo()))
+                sendUiEvent(UiEvent.Navigate(Routes.TodoEdit()))
             }
             is TodoListAction.OnUndoDeleteClick -> {
                 deletedTodo?.let { todo ->

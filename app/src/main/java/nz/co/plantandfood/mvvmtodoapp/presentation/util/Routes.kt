@@ -2,11 +2,11 @@ package nz.co.plantandfood.mvvmtodoapp.presentation.util
 
 import kotlinx.serialization.Serializable
 
-object Routes {
+sealed class Routes {
 
     @Serializable
-    object todo_list_obj
+    object TodoList
 
     @Serializable
-    data class add_edit_todo(val todoId: Int = -1)
+    data class TodoEdit(val todoId: Int = -1)
 }
