@@ -27,11 +27,10 @@ class TodoListViewModel @Inject constructor(
     fun onAction(action: TodoListAction) {
         when(action) {
             is TodoListAction.OnTodoClick -> {
-               // sendUiEvent(UiEvent.Navigate(Routes.ADD_EDIT_TODO + "?todoId=${event.todo.id}"))
-                action.todo.id?.let {
+              action.todo.id?.let {
                     sendUiEvent(UiEvent.Navigate(Routes.add_edit_todo(it)))
                 }
-               // sendUiEvent(UiEvent.Navigate(Routes.add_edit_todo(event.todo.id)))
+
 
             }
             is TodoListAction.OnAddTodoClick -> {
