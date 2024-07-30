@@ -17,8 +17,15 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import nz.co.plantandfood.mvvmtodoapp.presentation.util.UiEvent
 
+@Composable
+fun AddEditToDoEventRoot(
+    navController: NavController,
+    viewModel: AddEditTodoViewModel = hiltViewModel()) {
+
+}
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 
@@ -51,7 +58,7 @@ fun AddEditTodoScreen(
             .padding(16.dp),
         floatingActionButton = {
             FloatingActionButton(onClick = {
-                viewModel.onEvent(AddEditTodoEvent.OnSaveTodoClick)
+                viewModel.onAction(AddEditTodoAction.OnSaveTodoClick)
             }) {
                 Icon(
                     imageVector = Icons.Default.Check,
@@ -66,7 +73,7 @@ fun AddEditTodoScreen(
             TextField(
                 value = viewModel.title,
                 onValueChange = {
-                    viewModel.onEvent(AddEditTodoEvent.OnTitleChange(it))
+                    viewModel.onAction(AddEditTodoAction.OnTitleChange(it))
                 },
                 placeholder = {
                     Text(text = "Title")
@@ -77,7 +84,7 @@ fun AddEditTodoScreen(
             TextField(
                 value = viewModel.description,
                 onValueChange = {
-                    viewModel.onEvent(AddEditTodoEvent.OnDescriptionChange(it))
+                    viewModel.onAction(AddEditTodoAction.OnDescriptionChange(it))
                 },
                 placeholder = {
                     Text(text = "Description")

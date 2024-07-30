@@ -46,15 +46,15 @@ class AddEditTodoViewModel @Inject constructor(
         }
     }
 
-    fun onEvent(event: AddEditTodoEvent) {
-        when(event) {
-            is AddEditTodoEvent.OnTitleChange -> {
-                title = event.title
+    fun onAction(action: AddEditTodoAction) {
+        when(action) {
+            is AddEditTodoAction.OnTitleChange -> {
+                title = action.title
             }
-            is AddEditTodoEvent.OnDescriptionChange -> {
-                description = event.description
+            is AddEditTodoAction.OnDescriptionChange -> {
+                description = action.description
             }
-            is AddEditTodoEvent.OnSaveTodoClick -> {
+            is AddEditTodoAction.OnSaveTodoClick -> {
                 viewModelScope.launch {
                     if(title.isBlank()) {
                         sendUiEvent(

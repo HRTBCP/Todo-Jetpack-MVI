@@ -24,30 +24,30 @@ class TodoListViewModel @Inject constructor(
 
     private var deletedTodo: Todo? = null
 
-    fun onEvent(event: TodoListEvent) {
-        when(event) {
-            is TodoListEvent.OnTodoClick -> {
+    fun onAction(action: TodoListAction) {
+        when(action) {
+            is TodoListAction.OnTodoClick -> {
                // sendUiEvent(UiEvent.Navigate(Routes.ADD_EDIT_TODO + "?todoId=${event.todo.id}"))
-                event.todo.id?.let {
+                action.todo.id?.let {
                     sendUiEvent(UiEvent.Navigate(Routes.add_edit_todo(it)))
                 }
                // sendUiEvent(UiEvent.Navigate(Routes.add_edit_todo(event.todo.id)))
 
             }
-            is TodoListEvent.OnAddTodoClick -> {
+            is TodoListAction.OnAddTodoClick -> {
                 sendUiEvent(UiEvent.Navigate(Routes.add_edit_todo()))
             }
-            is TodoListEvent.OnUndoDeleteClick -> {
+            is TodoListAction.OnUndoDeleteClick -> {
                 deletedTodo?.let { todo ->
                     viewModelScope.launch {
                         repository.insertTodo(todo)
                     }
                 }
             }
-            is TodoListEvent.OnDeleteTodoClick -> {
+            is TodoListAction.OnDeleteTodoClick -> {
                 viewModelScope.launch {
-                    deletedTodo = event.todo
-                    repository.deleteTodo(event.todo)
+                    deletedTodo = action.todo
+                    repository.deleteTodo(action.todo)
                     sendUiEvent(
                         UiEvent.ShowSnackbar(
                         message = "Todo deleted",
@@ -55,11 +55,11 @@ class TodoListViewModel @Inject constructor(
                     ))
                 }
             }
-            is TodoListEvent.OnDoneChange -> {
+            is TodoListAction.OnDoneChange -> {
                 viewModelScope.launch {
                     repository.insertTodo(
-                        event.todo.copy(
-                            isDone = event.isDone
+                        action.todo.copy(
+                            isDone = action.isDone
                         )
                     )
                 }

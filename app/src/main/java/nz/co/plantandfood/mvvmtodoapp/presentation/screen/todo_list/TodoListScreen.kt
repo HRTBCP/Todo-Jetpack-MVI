@@ -38,7 +38,7 @@ fun TodoListScreen(
                         actionLabel = event.action
                     )
                     if(result == SnackbarResult.ActionPerformed) {
-                        viewModel.onEvent(TodoListEvent.OnUndoDeleteClick)
+                        viewModel.onAction(TodoListAction.OnUndoDeleteClick)
                     }
                 }
                 is UiEvent.Navigate -> onNavigate(event)
@@ -51,7 +51,7 @@ fun TodoListScreen(
         snackbarHost = { SnackbarHost(snackbarHostState) },
         floatingActionButton = {
             FloatingActionButton(onClick = {
-                viewModel.onEvent(TodoListEvent.OnAddTodoClick)
+                viewModel.onAction(TodoListAction.OnAddTodoClick)
             }) {
                 Icon(
                     imageVector = Icons.Default.Add,
@@ -66,15 +66,16 @@ fun TodoListScreen(
             items(todos.value) { todo ->
                 TodoItem(
                     todo = todo,
-                    onEvent = viewModel::onEvent,
+                    onEvent = viewModel::onAction,
                     modifier = Modifier
                         .fillMaxWidth()
                         .clickable {
-                            viewModel.onEvent(TodoListEvent.OnTodoClick(todo))
+                            viewModel.onAction(TodoListAction.OnTodoClick(todo))
                         }
                         .padding(16.dp)
                 )
             }
         }
+
     }
 }
