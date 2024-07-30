@@ -1,8 +1,7 @@
-package nz.co.plantandfood.mvvmtodoapp.data
+package nz.co.plantandfood.mvvmtodoapp.domain
 
 import androidx.room.*
 import kotlinx.coroutines.flow.Flow
-import nz.co.plantandfood.mvvmtodoapp.data.Todo
 
 @Dao
 interface TodoDao {

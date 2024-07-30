@@ -1,9 +1,7 @@
-package nz.co.plantandfood.mvvmtodoapp.data
+package nz.co.plantandfood.mvvmtodoapp.domain
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
-import nz.co.plantandfood.mvvmtodoapp.data.Todo
-import nz.co.plantandfood.mvvmtodoapp.data.TodoDao
 
 @Database(
     entities = [Todo::class],

@@ -1,9 +1,9 @@
 package nz.co.plantandfood.mvvmtodoapp.data
 
 import kotlinx.coroutines.flow.Flow
-import nz.co.plantandfood.mvvmtodoapp.data.Todo
-import nz.co.plantandfood.mvvmtodoapp.data.TodoDao
-import nz.co.plantandfood.mvvmtodoapp.data.TodoRepository
+import nz.co.plantandfood.mvvmtodoapp.domain.Todo
+import nz.co.plantandfood.mvvmtodoapp.domain.TodoDao
+import nz.co.plantandfood.mvvmtodoapp.domain.TodoRepository
 
 class TodoRepositoryImpl(
     private val dao: TodoDao

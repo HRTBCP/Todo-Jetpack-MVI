@@ -6,8 +6,8 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import nz.co.plantandfood.mvvmtodoapp.data.Todo
-import nz.co.plantandfood.mvvmtodoapp.data.TodoRepository
+import nz.co.plantandfood.mvvmtodoapp.domain.Todo
+import nz.co.plantandfood.mvvmtodoapp.domain.TodoRepository
 import nz.co.plantandfood.mvvmtodoapp.presentation.util.UiEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel

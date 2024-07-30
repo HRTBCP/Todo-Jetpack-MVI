@@ -1,6 +1,6 @@
 package nz.co.plantandfood.mvvmtodoapp.presentation.screen.todo_list
 
-import nz.co.plantandfood.mvvmtodoapp.data.Todo
+import nz.co.plantandfood.mvvmtodoapp.domain.Todo
 
 sealed class TodoListEvent {
     data class OnDeleteTodoClick(val todo: Todo): TodoListEvent()

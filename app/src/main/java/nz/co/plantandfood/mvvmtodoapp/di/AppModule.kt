@@ -2,8 +2,8 @@ package nz.co.plantandfood.mvvmtodoapp.di
 
 import android.app.Application
 import androidx.room.Room
-import nz.co.plantandfood.mvvmtodoapp.data.TodoDatabase
-import nz.co.plantandfood.mvvmtodoapp.data.TodoRepository
+import nz.co.plantandfood.mvvmtodoapp.domain.TodoDatabase
+import nz.co.plantandfood.mvvmtodoapp.domain.TodoRepository
 import nz.co.plantandfood.mvvmtodoapp.data.TodoRepositoryImpl
 import dagger.Module
 import dagger.Provides

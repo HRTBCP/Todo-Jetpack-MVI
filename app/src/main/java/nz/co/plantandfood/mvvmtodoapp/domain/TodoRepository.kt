@@ -1,7 +1,6 @@
-package nz.co.plantandfood.mvvmtodoapp.data
+package nz.co.plantandfood.mvvmtodoapp.domain
 
 import kotlinx.coroutines.flow.Flow
-import nz.co.plantandfood.mvvmtodoapp.data.Todo
 
 interface TodoRepository {
 
