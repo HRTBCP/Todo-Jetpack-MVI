@@ -1,4 +1,4 @@
-package nz.co.plantandfood.mvvmtodoapp.view.theme
+package nz.co.plantandfood.mvvmtodoapp.presentation.theme
 
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Shapes

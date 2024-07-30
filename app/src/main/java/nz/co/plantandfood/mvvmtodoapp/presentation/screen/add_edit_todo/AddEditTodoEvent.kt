@@ -1,4 +1,4 @@
-package nz.co.plantandfood.mvvmtodoapp.view.add_edit_todo
+package nz.co.plantandfood.mvvmtodoapp.presentation.screen.add_edit_todo
 
 sealed class AddEditTodoEvent {
     data class OnTitleChange(val title: String): AddEditTodoEvent()

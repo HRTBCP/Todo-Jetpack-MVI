@@ -1,11 +1,11 @@
-package nz.co.plantandfood.mvvmtodoapp.view.todo_list
+package nz.co.plantandfood.mvvmtodoapp.presentation.screen.todo_list
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import nz.co.plantandfood.mvvmtodoapp.data.Todo
 import nz.co.plantandfood.mvvmtodoapp.data.TodoRepository
-import nz.co.plantandfood.mvvmtodoapp.util.Routes
-import nz.co.plantandfood.mvvmtodoapp.util.UiEvent
+import nz.co.plantandfood.mvvmtodoapp.presentation.util.Routes
+import nz.co.plantandfood.mvvmtodoapp.presentation.util.UiEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow

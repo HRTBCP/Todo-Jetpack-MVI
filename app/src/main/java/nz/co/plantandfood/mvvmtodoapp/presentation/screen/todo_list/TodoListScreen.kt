@@ -1,4 +1,4 @@
-package nz.co.plantandfood.mvvmtodoapp.view.todo_list
+package nz.co.plantandfood.mvvmtodoapp.presentation.screen.todo_list
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.clickable
@@ -17,7 +17,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import nz.co.plantandfood.mvvmtodoapp.util.UiEvent
+import nz.co.plantandfood.mvvmtodoapp.presentation.util.UiEvent
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable

@@ -1,4 +1,4 @@
-package nz.co.plantandfood.mvvmtodoapp.util
+package nz.co.plantandfood.mvvmtodoapp.presentation.util
 
 import kotlinx.serialization.Serializable
 
