@@ -7,6 +7,7 @@ import androidx.compose.material.icons.filled.Check
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
@@ -20,32 +21,31 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import nz.co.plantandfood.mvvmtodoapp.presentation.util.UiEvent
 
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun AddEditToDoEventRoot(
     navController: NavController,
-    viewModel: AddEditTodoViewModel = hiltViewModel()) {
-
-}
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
-@Composable
-
-fun AddEditTodoScreen(
-    onPopBackStack: () -> Unit,
     viewModel: AddEditTodoViewModel = hiltViewModel()
 ) {
+
     val snackbarHostState = remember { SnackbarHostState() }
-  //  val scaffoldState = rememberScaffoldState()
+
     LaunchedEffect(key1 = true) {
         viewModel.uiEvent.collect { event ->
-            when(event) {
-                is UiEvent.PopBackStack -> onPopBackStack()
+            when (event) {
+                is UiEvent.PopBackStack -> {
+                    navController.popBackStack()
+
+                }
                 is UiEvent.ShowSnackbar -> {
-                   // scaffoldState.
+
                     snackbarHostState.showSnackbar(
                         message = event.message,
-                        actionLabel = event.action
+                        actionLabel = event.action,
+                        duration = SnackbarDuration.Short
                     )
                 }
+
                 else -> Unit
             }
         }
@@ -67,32 +67,43 @@ fun AddEditTodoScreen(
             }
         }
     ) {
-        Column(
-            modifier = Modifier.fillMaxSize()
-        ) {
-            TextField(
-                value = viewModel.title,
-                onValueChange = {
-                    viewModel.onAction(AddEditTodoAction.OnTitleChange(it))
-                },
-                placeholder = {
-                    Text(text = "Title")
-                },
-                modifier = Modifier.fillMaxWidth()
-            )
-            Spacer(modifier = Modifier.height(8.dp))
-            TextField(
-                value = viewModel.description,
-                onValueChange = {
-                    viewModel.onAction(AddEditTodoAction.OnDescriptionChange(it))
-                },
-                placeholder = {
-                    Text(text = "Description")
-                },
-                modifier = Modifier.fillMaxWidth(),
-                singleLine = false,
-                maxLines = 5
-            )
-        }
+        AddEditTodoScreen(viewModel.title, viewModel.description, viewModel::onAction)
     }
+
+}
+
+@Composable
+fun AddEditTodoScreen(
+    title: String,
+    description: String,
+    onAction: (AddEditTodoAction) -> Unit
+) {
+    Column(
+        modifier = Modifier.fillMaxSize()
+    ) {
+        TextField(
+            value = title,
+            onValueChange = {
+                onAction(AddEditTodoAction.OnTitleChange(it))
+            },
+            placeholder = {
+                Text(text = "Title")
+            },
+            modifier = Modifier.fillMaxWidth()
+        )
+        Spacer(modifier = Modifier.height(8.dp))
+        TextField(
+            value = description,
+            onValueChange = {
+                onAction(AddEditTodoAction.OnDescriptionChange(it))
+            },
+            placeholder = {
+                Text(text = "Description")
+            },
+            modifier = Modifier.fillMaxWidth(),
+            singleLine = false,
+            maxLines = 5
+        )
+    }
+
 }

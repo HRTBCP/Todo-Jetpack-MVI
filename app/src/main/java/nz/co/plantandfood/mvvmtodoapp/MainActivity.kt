@@ -11,6 +11,8 @@ import nz.co.plantandfood.mvvmtodoapp.presentation.theme.MVVMTodoAppTheme
 import nz.co.plantandfood.mvvmtodoapp.presentation.screen.todo_list.TodoListScreen
 import nz.co.plantandfood.mvvmtodoapp.presentation.util.Routes
 import dagger.hilt.android.AndroidEntryPoint
+import nz.co.plantandfood.mvvmtodoapp.presentation.screen.add_edit_todo.AddEditToDoEventRoot
+import nz.co.plantandfood.mvvmtodoapp.presentation.screen.todo_list.TodoListScreenRoot
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -24,18 +26,14 @@ class MainActivity : ComponentActivity() {
                     startDestination = Routes.TodoList
                 ) {
                     composable<Routes.TodoList> {
-                        TodoListScreen(
-                            onNavigate = {
-                                //navigate to instance oft todo_list_obj
-                                navController.navigate(it.route)
-                            }
+                        TodoListScreenRoot(
+                            navController
                         )
                     }
                     composable <Routes.TodoEdit> {
                         //  val taskScreen = it.toRoute<TaskScreenNav>()
-                        AddEditTodoScreen(onPopBackStack = {
-                            navController.popBackStack()
-                        })
+                        AddEditToDoEventRoot(navController)
+
                     }
                 }
             }

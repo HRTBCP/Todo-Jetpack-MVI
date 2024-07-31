@@ -18,7 +18,7 @@ import nz.co.plantandfood.mvvmtodoapp.domain.Todo
 @Composable
 fun TodoItem(
     todo: Todo,
-    onEvent: (TodoListAction) -> Unit,
+    onAction: (TodoListAction) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Row(
@@ -39,7 +39,7 @@ fun TodoItem(
                 )
                 Spacer(modifier = Modifier.width(8.dp))
                 IconButton(onClick = {
-                    onEvent(TodoListAction.OnDeleteTodoClick(todo))
+                    onAction(TodoListAction.OnDeleteTodoClick(todo))
                 }) {
                     Icon(
                         imageVector = Icons.Default.Delete,
@@ -55,7 +55,7 @@ fun TodoItem(
         Checkbox(
             checked = todo.isDone,
             onCheckedChange = { isChecked ->
-                onEvent(TodoListAction.OnDoneChange(todo, isChecked))
+                onAction(TodoListAction.OnDoneChange(todo, isChecked))
             }
         )
     }

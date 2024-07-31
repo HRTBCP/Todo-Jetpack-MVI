@@ -17,23 +17,20 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
+import nz.co.plantandfood.mvvmtodoapp.domain.Todo
 import nz.co.plantandfood.mvvmtodoapp.presentation.util.UiEvent
-
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun TodoListScreen(
-    onNavigate: (UiEvent.Navigate) -> Unit,
-    viewModel: TodoListViewModel = hiltViewModel()
-) {
+fun TodoListScreenRoot(navController: NavController, viewModel: TodoListViewModel = hiltViewModel()) {
     val todos = viewModel.todos.collectAsState(initial = emptyList())
-//    val scaffoldState = rememberScaffoldState()
+
     val snackbarHostState = remember { SnackbarHostState() }
     LaunchedEffect(key1 = true) {
         viewModel.uiEvent.collect { event ->
             when(event) {
                 is UiEvent.ShowSnackbar -> {
-                    val result = //scaffoldState.
-                    snackbarHostState.showSnackbar(
+                    val result = snackbarHostState.showSnackbar(
                         message = event.message,
                         actionLabel = event.action
                     )
@@ -41,13 +38,12 @@ fun TodoListScreen(
                         viewModel.onAction(TodoListAction.OnUndoDeleteClick)
                     }
                 }
-                is UiEvent.Navigate -> onNavigate(event)
+                is UiEvent.Navigate -> navController.navigate(event.route)
                 else -> Unit
             }
         }
     }
     Scaffold(
-//        scaffoldState = scaffoldState,
         snackbarHost = { SnackbarHost(snackbarHostState) },
         floatingActionButton = {
             FloatingActionButton(onClick = {
@@ -60,22 +56,35 @@ fun TodoListScreen(
             }
         }
     ) {
+
+        TodoListScreen(todos.value, viewModel::onAction)
+
+    }
+}
+
+
+@Composable
+fun TodoListScreen(
+    todos: List<Todo>,
+    onAction: (TodoListAction) -> Unit,
+) {
+
         LazyColumn(
             modifier = Modifier.fillMaxSize()
         ) {
-            items(todos.value) { todo ->
+            items(todos) { todo ->
                 TodoItem(
                     todo = todo,
-                    onEvent = viewModel::onAction,
+                    onAction = onAction,
                     modifier = Modifier
                         .fillMaxWidth()
                         .clickable {
-                            viewModel.onAction(TodoListAction.OnTodoClick(todo))
+                            onAction(TodoListAction.OnTodoClick(todo))
                         }
                         .padding(16.dp)
                 )
             }
         }
 
-    }
+
 }
