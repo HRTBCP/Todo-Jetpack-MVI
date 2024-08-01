@@ -8,7 +8,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import nz.co.plantandfood.mvvmtodoapp.domain.Todo
 import nz.co.plantandfood.mvvmtodoapp.domain.TodoRepository
-import nz.co.plantandfood.mvvmtodoapp.presentation.util.UiEvent
+import nz.co.plantandfood.mvvmtodoapp.presentation.util.UiEffect
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -20,27 +20,24 @@ class AddEditTodoViewModel @Inject constructor(
     private val repository: TodoRepository,
     savedStateHandle: SavedStateHandle
 ): ViewModel() {
-
-    var todo by mutableStateOf<Todo?>(null)
+    val initialState: AddEditTodoState by lazy {
+        AddEditTodoState()
+    }
+    var todoState by mutableStateOf(initialState)
         private set
 
-    var title by mutableStateOf("")
-        private set
 
-    var description by mutableStateOf("")
-        private set
-
-    private val _uiEvent =  Channel<UiEvent>()
-    val uiEvent = _uiEvent.receiveAsFlow()
+    private val _uiEffect =  Channel<UiEffect>()
+    val uiEffect = _uiEffect.receiveAsFlow()
 
     init {
         val todoId = savedStateHandle.get<Int>("todoId")!!
+        todoState = AddEditTodoState()
         if(todoId != -1) {
             viewModelScope.launch {
                 repository.getTodoById(todoId)?.let { todo ->
-                    title = todo.title
-                    description = todo.description ?: ""
-                    this@AddEditTodoViewModel.todo = todo
+                    todoState = todoState.copy(title = todo.title, description =  todo.description ?: "", todo  = todo)
+                   // this@AddEditTodoViewModel.todo = todo
                 }
             }
         }
@@ -49,37 +46,37 @@ class AddEditTodoViewModel @Inject constructor(
     fun onAction(action: AddEditTodoAction) {
         when(action) {
             is AddEditTodoAction.OnTitleChange -> {
-                title = action.title
+                todoState = todoState.copy(title = action.title)
             }
             is AddEditTodoAction.OnDescriptionChange -> {
-                description = action.description
+                todoState = todoState.copy(description = action.description)
             }
             is AddEditTodoAction.OnSaveTodoClick -> {
                 viewModelScope.launch {
-                    if(title.isBlank()) {
-                        sendUiEvent(
-                            UiEvent.ShowSnackbar(
+                    if(todoState.title.isBlank()) {
+                        sendUiEffect(
+                            UiEffect.ShowSnackbar(
                             message = "The title can't be empty"
                         ))
                         return@launch
                     }
                     repository.insertTodo(
                         Todo(
-                            title = title,
-                            description = description,
-                            isDone = todo?.isDone ?: false,
-                            id = todo?.id
+                            title = todoState.title,
+                            description = todoState.description,
+                            isDone = todoState.todo?.isDone ?: false,
+                            id = todoState.todo?.id
                         )
                     )
-                    sendUiEvent(UiEvent.PopBackStack)
+                    sendUiEffect(UiEffect.PopBackStack)
                 }
             }
         }
     }
 
-    private fun sendUiEvent(event: UiEvent) {
+    private fun sendUiEffect(event: UiEffect) {
         viewModelScope.launch {
-            _uiEvent.send(event)
+            _uiEffect.send(event)
         }
     }
 }

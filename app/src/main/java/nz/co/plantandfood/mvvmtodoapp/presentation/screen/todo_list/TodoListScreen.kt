@@ -18,27 +18,45 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import kotlinx.coroutines.flow.Flow
 import nz.co.plantandfood.mvvmtodoapp.domain.Todo
-import nz.co.plantandfood.mvvmtodoapp.presentation.util.UiEvent
+import nz.co.plantandfood.mvvmtodoapp.presentation.util.UiEffect
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun TodoListScreenRoot(navController: NavController, viewModel: TodoListViewModel = hiltViewModel()) {
     val todos = viewModel.todos.collectAsState(initial = emptyList())
 
+    TodoListScreen(todos.value, viewModel::onAction, viewModel.uiEffect) {
+        navController.navigate(it.route)
+    }
+
+
+}
+
+
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
+@Composable
+fun TodoListScreen(
+    todos: List<Todo>,
+    onAction: (TodoListAction) -> Unit,
+    uiEffect: Flow<UiEffect>,
+    onNavigationRequested: (UiEffect.Navigate) -> Unit
+
+) {
     val snackbarHostState = remember { SnackbarHostState() }
     LaunchedEffect(key1 = true) {
-        viewModel.uiEvent.collect { event ->
+        uiEffect.collect { event ->
             when(event) {
-                is UiEvent.ShowSnackbar -> {
+                is UiEffect.ShowSnackbar -> {
                     val result = snackbarHostState.showSnackbar(
                         message = event.message,
                         actionLabel = event.action
                     )
                     if(result == SnackbarResult.ActionPerformed) {
-                        viewModel.onAction(TodoListAction.OnUndoDeleteClick)
+                        onAction(TodoListAction.OnUndoDeleteClick)
                     }
                 }
-                is UiEvent.Navigate -> navController.navigate(event.route)
+                is UiEffect.Navigate ->onNavigationRequested(event)
                 else -> Unit
             }
         }
@@ -47,7 +65,7 @@ fun TodoListScreenRoot(navController: NavController, viewModel: TodoListViewMode
         snackbarHost = { SnackbarHost(snackbarHostState) },
         floatingActionButton = {
             FloatingActionButton(onClick = {
-                viewModel.onAction(TodoListAction.OnAddTodoClick)
+                onAction(TodoListAction.OnAddTodoClick)
             }) {
                 Icon(
                     imageVector = Icons.Default.Add,
@@ -56,18 +74,6 @@ fun TodoListScreenRoot(navController: NavController, viewModel: TodoListViewMode
             }
         }
     ) {
-
-        TodoListScreen(todos.value, viewModel::onAction)
-
-    }
-}
-
-
-@Composable
-fun TodoListScreen(
-    todos: List<Todo>,
-    onAction: (TodoListAction) -> Unit,
-) {
 
         LazyColumn(
             modifier = Modifier.fillMaxSize()
@@ -85,6 +91,6 @@ fun TodoListScreen(
                 )
             }
         }
-
+    }
 
 }

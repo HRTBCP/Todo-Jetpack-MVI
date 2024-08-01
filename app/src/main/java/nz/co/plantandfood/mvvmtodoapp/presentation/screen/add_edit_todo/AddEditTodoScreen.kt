@@ -19,7 +19,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import nz.co.plantandfood.mvvmtodoapp.presentation.util.UiEvent
+import kotlinx.coroutines.flow.Flow
+import nz.co.plantandfood.mvvmtodoapp.presentation.util.UiEffect
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
@@ -28,21 +29,36 @@ fun AddEditToDoEventRoot(
     viewModel: AddEditTodoViewModel = hiltViewModel()
 ) {
 
+        AddEditTodoScreen(viewModel.todoState, viewModel.uiEffect, viewModel::onAction) {
+            navController.popBackStack()
+        }
+
+
+}
+
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
+@Composable
+fun AddEditTodoScreen(
+    todoState: AddEditTodoState,
+    uiEffect: Flow<UiEffect>,
+    onAction: (AddEditTodoAction) -> Unit,
+    onPopBackStack: () -> Unit
+) {
+
     val snackbarHostState = remember { SnackbarHostState() }
 
     LaunchedEffect(key1 = true) {
-        viewModel.uiEvent.collect { event ->
-            when (event) {
-                is UiEvent.PopBackStack -> {
-                    navController.popBackStack()
+        uiEffect.collect { effect ->
+            when (effect) {
+                is UiEffect.PopBackStack -> {
+                    onPopBackStack()
 
                 }
-                is UiEvent.ShowSnackbar -> {
+                is UiEffect.ShowSnackbar -> {
 
                     snackbarHostState.showSnackbar(
-                        message = event.message,
-                        actionLabel = event.action,
-                        duration = SnackbarDuration.Short
+                        message = effect.message,
+                        actionLabel = effect.action
                     )
                 }
 
@@ -58,7 +74,7 @@ fun AddEditToDoEventRoot(
             .padding(16.dp),
         floatingActionButton = {
             FloatingActionButton(onClick = {
-                viewModel.onAction(AddEditTodoAction.OnSaveTodoClick)
+                onAction(AddEditTodoAction.OnSaveTodoClick)
             }) {
                 Icon(
                     imageVector = Icons.Default.Check,
@@ -67,43 +83,32 @@ fun AddEditToDoEventRoot(
             }
         }
     ) {
-        AddEditTodoScreen(viewModel.title, viewModel.description, viewModel::onAction)
+        Column(
+            modifier = Modifier.fillMaxSize()
+        ) {
+            TextField(
+                value = todoState.title,
+                onValueChange = {
+                    onAction(AddEditTodoAction.OnTitleChange(it))
+                },
+                placeholder = {
+                    Text(text = "Title")
+                },
+                modifier = Modifier.fillMaxWidth()
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            TextField(
+                value = todoState.description ,
+                onValueChange = {
+                    onAction(AddEditTodoAction.OnDescriptionChange(it))
+                },
+                placeholder = {
+                    Text(text = "Description")
+                },
+                modifier = Modifier.fillMaxWidth(),
+                singleLine = false,
+                maxLines = 5
+            )
+        }
     }
-
-}
-
-@Composable
-fun AddEditTodoScreen(
-    title: String,
-    description: String,
-    onAction: (AddEditTodoAction) -> Unit
-) {
-    Column(
-        modifier = Modifier.fillMaxSize()
-    ) {
-        TextField(
-            value = title,
-            onValueChange = {
-                onAction(AddEditTodoAction.OnTitleChange(it))
-            },
-            placeholder = {
-                Text(text = "Title")
-            },
-            modifier = Modifier.fillMaxWidth()
-        )
-        Spacer(modifier = Modifier.height(8.dp))
-        TextField(
-            value = description,
-            onValueChange = {
-                onAction(AddEditTodoAction.OnDescriptionChange(it))
-            },
-            placeholder = {
-                Text(text = "Description")
-            },
-            modifier = Modifier.fillMaxWidth(),
-            singleLine = false,
-            maxLines = 5
-        )
-    }
-
 }

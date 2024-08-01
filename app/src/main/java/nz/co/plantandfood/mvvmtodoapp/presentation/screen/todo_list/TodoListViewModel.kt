@@ -5,7 +5,7 @@ import androidx.lifecycle.viewModelScope
 import nz.co.plantandfood.mvvmtodoapp.domain.Todo
 import nz.co.plantandfood.mvvmtodoapp.domain.TodoRepository
 import nz.co.plantandfood.mvvmtodoapp.presentation.util.Routes
-import nz.co.plantandfood.mvvmtodoapp.presentation.util.UiEvent
+import nz.co.plantandfood.mvvmtodoapp.presentation.util.UiEffect
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -19,8 +19,8 @@ class TodoListViewModel @Inject constructor(
 
     val todos = repository.getTodos()
 
-    private val _uiEvent =  Channel<UiEvent>()
-    val uiEvent = _uiEvent.receiveAsFlow()
+    private val _uiEffect =  Channel<UiEffect>()
+    val uiEffect = _uiEffect.receiveAsFlow()
 
     private var deletedTodo: Todo? = null
 
@@ -28,13 +28,13 @@ class TodoListViewModel @Inject constructor(
         when(action) {
             is TodoListAction.OnTodoClick -> {
               action.todo.id?.let {
-                    sendUiEvent(UiEvent.Navigate(Routes.TodoEdit(it)))
+                    sendUiEffect(UiEffect.Navigate(Routes.TodoEdit(it)))
                 }
 
 
             }
             is TodoListAction.OnAddTodoClick -> {
-                sendUiEvent(UiEvent.Navigate(Routes.TodoEdit()))
+                sendUiEffect(UiEffect.Navigate(Routes.TodoEdit()))
             }
             is TodoListAction.OnUndoDeleteClick -> {
                 deletedTodo?.let { todo ->
@@ -47,8 +47,8 @@ class TodoListViewModel @Inject constructor(
                 viewModelScope.launch {
                     deletedTodo = action.todo
                     repository.deleteTodo(action.todo)
-                    sendUiEvent(
-                        UiEvent.ShowSnackbar(
+                    sendUiEffect(
+                        UiEffect.ShowSnackbar(
                         message = "Todo deleted",
                         action = "Undo"
                     ))
@@ -66,9 +66,9 @@ class TodoListViewModel @Inject constructor(
         }
     }
 
-    private fun sendUiEvent(event: UiEvent) {
+    private fun sendUiEffect(event: UiEffect) {
         viewModelScope.launch {
-            _uiEvent.send(event)
+            _uiEffect.send(event)
         }
     }
 }
