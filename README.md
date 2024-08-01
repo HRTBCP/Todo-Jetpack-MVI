@@ -1,5 +1,6 @@
 A Todo Jetpack Compose application using MVI
-**References**
+
+  **References**
 
   MVI: https://www.youtube.com/watch?v=b2z1jvD4VMQ
 
