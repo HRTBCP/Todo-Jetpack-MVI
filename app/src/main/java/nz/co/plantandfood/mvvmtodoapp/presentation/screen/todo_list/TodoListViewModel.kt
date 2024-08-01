@@ -5,7 +5,6 @@ import androidx.lifecycle.viewModelScope
 import nz.co.plantandfood.mvvmtodoapp.domain.Todo
 import nz.co.plantandfood.mvvmtodoapp.domain.TodoRepository
 import nz.co.plantandfood.mvvmtodoapp.presentation.util.Routes
-import nz.co.plantandfood.mvvmtodoapp.presentation.util.UiEffect
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -19,42 +18,42 @@ class TodoListViewModel @Inject constructor(
 
     val todos = repository.getTodos()
 
-    private val _uiEffect =  Channel<UiEffect>()
+    private val _uiEffect =  Channel<TodoListContract.Effect>()
     val uiEffect = _uiEffect.receiveAsFlow()
 
     private var deletedTodo: Todo? = null
 
-    fun onAction(action: TodoListAction) {
+    fun onAction(action: TodoListContract.Action) {
         when(action) {
-            is TodoListAction.OnTodoClick -> {
+            is TodoListContract.Action.OnTodoClick -> {
               action.todo.id?.let {
-                    sendUiEffect(UiEffect.Navigate(Routes.TodoEdit(it)))
+                    sendUiEffect(TodoListContract.Effect.Navigate(Routes.TodoEdit(it)))
                 }
 
 
             }
-            is TodoListAction.OnAddTodoClick -> {
-                sendUiEffect(UiEffect.Navigate(Routes.TodoEdit()))
+            is TodoListContract.Action.OnAddTodoClick -> {
+                sendUiEffect(TodoListContract.Effect.Navigate(Routes.TodoEdit()))
             }
-            is TodoListAction.OnUndoDeleteClick -> {
+            is TodoListContract.Action.OnUndoDeleteClick -> {
                 deletedTodo?.let { todo ->
                     viewModelScope.launch {
                         repository.insertTodo(todo)
                     }
                 }
             }
-            is TodoListAction.OnDeleteTodoClick -> {
+            is TodoListContract.Action.OnDeleteTodoClick -> {
                 viewModelScope.launch {
                     deletedTodo = action.todo
                     repository.deleteTodo(action.todo)
                     sendUiEffect(
-                        UiEffect.ShowSnackbar(
+                        TodoListContract.Effect.ShowSnackbar(
                         message = "Todo deleted",
                         action = "Undo"
                     ))
                 }
             }
-            is TodoListAction.OnDoneChange -> {
+            is TodoListContract.Action.OnDoneChange -> {
                 viewModelScope.launch {
                     repository.insertTodo(
                         action.todo.copy(
@@ -66,7 +65,7 @@ class TodoListViewModel @Inject constructor(
         }
     }
 
-    private fun sendUiEffect(event: UiEffect) {
+    private fun sendUiEffect(event: TodoListContract.Effect) {
         viewModelScope.launch {
             _uiEffect.send(event)
         }

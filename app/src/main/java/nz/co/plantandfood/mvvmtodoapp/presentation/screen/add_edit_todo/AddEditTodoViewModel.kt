@@ -8,7 +8,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import nz.co.plantandfood.mvvmtodoapp.domain.Todo
 import nz.co.plantandfood.mvvmtodoapp.domain.TodoRepository
-import nz.co.plantandfood.mvvmtodoapp.presentation.util.UiEffect
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -20,14 +19,14 @@ class AddEditTodoViewModel @Inject constructor(
     private val repository: TodoRepository,
     savedStateHandle: SavedStateHandle
 ): ViewModel() {
-    val initialState: AddEditTodoState by lazy {
+    private val initialState: AddEditTodoState by lazy {
         AddEditTodoState()
     }
     var todoState by mutableStateOf(initialState)
         private set
 
 
-    private val _uiEffect =  Channel<UiEffect>()
+    private val _uiEffect =  Channel<AddEditTodoContract.Effect>()
     val uiEffect = _uiEffect.receiveAsFlow()
 
     init {
@@ -43,19 +42,19 @@ class AddEditTodoViewModel @Inject constructor(
         }
     }
 
-    fun onAction(action: AddEditTodoAction) {
+    fun onAction(action: AddEditTodoContract.Action) {
         when(action) {
-            is AddEditTodoAction.OnTitleChange -> {
+            is AddEditTodoContract.Action.OnTitleChange -> {
                 todoState = todoState.copy(title = action.title)
             }
-            is AddEditTodoAction.OnDescriptionChange -> {
+            is AddEditTodoContract.Action.OnDescriptionChange -> {
                 todoState = todoState.copy(description = action.description)
             }
-            is AddEditTodoAction.OnSaveTodoClick -> {
+            is AddEditTodoContract.Action.OnSaveTodoClick -> {
                 viewModelScope.launch {
                     if(todoState.title.isBlank()) {
                         sendUiEffect(
-                            UiEffect.ShowSnackbar(
+                            AddEditTodoContract.Effect.ShowSnackbar(
                             message = "The title can't be empty"
                         ))
                         return@launch
@@ -68,13 +67,13 @@ class AddEditTodoViewModel @Inject constructor(
                             id = todoState.todo?.id
                         )
                     )
-                    sendUiEffect(UiEffect.PopBackStack)
+                    sendUiEffect(AddEditTodoContract.Effect.PopBackStack)
                 }
             }
         }
     }
 
-    private fun sendUiEffect(event: UiEffect) {
+    private fun sendUiEffect(event: AddEditTodoContract.Effect) {
         viewModelScope.launch {
             _uiEffect.send(event)
         }

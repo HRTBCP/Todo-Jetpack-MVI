@@ -1,4 +1,4 @@
-package nz.co.plantandfood.mvvmtodoapp.presentation.screen.todo_list
+package nz.co.plantandfood.mvvmtodoapp.presentation.screen.todo_list.composables
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.clickable
@@ -20,7 +20,9 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import kotlinx.coroutines.flow.Flow
 import nz.co.plantandfood.mvvmtodoapp.domain.Todo
-import nz.co.plantandfood.mvvmtodoapp.presentation.util.UiEffect
+import nz.co.plantandfood.mvvmtodoapp.presentation.screen.todo_list.TodoListContract
+import nz.co.plantandfood.mvvmtodoapp.presentation.screen.todo_list.TodoListViewModel
+
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun TodoListScreenRoot(navController: NavController, viewModel: TodoListViewModel = hiltViewModel()) {
@@ -38,25 +40,25 @@ fun TodoListScreenRoot(navController: NavController, viewModel: TodoListViewMode
 @Composable
 fun TodoListScreen(
     todos: List<Todo>,
-    onAction: (TodoListAction) -> Unit,
-    uiEffect: Flow<UiEffect>,
-    onNavigationRequested: (UiEffect.Navigate) -> Unit
+    onAction: (TodoListContract.Action) -> Unit,
+    uiEffect: Flow<TodoListContract.Effect>,
+    onNavigationRequested: (TodoListContract.Effect.Navigate) -> Unit
 
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
     LaunchedEffect(key1 = true) {
         uiEffect.collect { event ->
             when(event) {
-                is UiEffect.ShowSnackbar -> {
+                is TodoListContract.Effect.ShowSnackbar -> {
                     val result = snackbarHostState.showSnackbar(
                         message = event.message,
                         actionLabel = event.action
                     )
                     if(result == SnackbarResult.ActionPerformed) {
-                        onAction(TodoListAction.OnUndoDeleteClick)
+                        onAction(TodoListContract.Action.OnUndoDeleteClick)
                     }
                 }
-                is UiEffect.Navigate ->onNavigationRequested(event)
+                is TodoListContract.Effect.Navigate ->onNavigationRequested(event)
                 else -> Unit
             }
         }
@@ -65,7 +67,7 @@ fun TodoListScreen(
         snackbarHost = { SnackbarHost(snackbarHostState) },
         floatingActionButton = {
             FloatingActionButton(onClick = {
-                onAction(TodoListAction.OnAddTodoClick)
+                onAction(TodoListContract.Action.OnAddTodoClick)
             }) {
                 Icon(
                     imageVector = Icons.Default.Add,
@@ -85,7 +87,7 @@ fun TodoListScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .clickable {
-                            onAction(TodoListAction.OnTodoClick(todo))
+                            onAction(TodoListContract.Action.OnTodoClick(todo))
                         }
                         .padding(16.dp)
                 )

@@ -1,4 +1,4 @@
-package nz.co.plantandfood.mvvmtodoapp.presentation.screen.todo_list
+package nz.co.plantandfood.mvvmtodoapp.presentation.screen.todo_list.composables
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
@@ -14,11 +14,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import nz.co.plantandfood.mvvmtodoapp.domain.Todo
+import nz.co.plantandfood.mvvmtodoapp.presentation.screen.todo_list.TodoListContract
 
 @Composable
 fun TodoItem(
     todo: Todo,
-    onAction: (TodoListAction) -> Unit,
+    onAction: (TodoListContract.Action) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Row(
@@ -39,7 +40,7 @@ fun TodoItem(
                 )
                 Spacer(modifier = Modifier.width(8.dp))
                 IconButton(onClick = {
-                    onAction(TodoListAction.OnDeleteTodoClick(todo))
+                    onAction(TodoListContract.Action.OnDeleteTodoClick(todo))
                 }) {
                     Icon(
                         imageVector = Icons.Default.Delete,
@@ -55,7 +56,7 @@ fun TodoItem(
         Checkbox(
             checked = todo.isDone,
             onCheckedChange = { isChecked ->
-                onAction(TodoListAction.OnDoneChange(todo, isChecked))
+                onAction(TodoListContract.Action.OnDoneChange(todo, isChecked))
             }
         )
     }

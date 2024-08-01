@@ -1,4 +1,4 @@
-package nz.co.plantandfood.mvvmtodoapp.presentation.screen.add_edit_todo
+package nz.co.plantandfood.mvvmtodoapp.presentation.screen.add_edit_todo.composables
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.*
@@ -7,7 +7,6 @@ import androidx.compose.material.icons.filled.Check
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
@@ -20,7 +19,9 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import kotlinx.coroutines.flow.Flow
-import nz.co.plantandfood.mvvmtodoapp.presentation.util.UiEffect
+import nz.co.plantandfood.mvvmtodoapp.presentation.screen.add_edit_todo.AddEditTodoContract
+import nz.co.plantandfood.mvvmtodoapp.presentation.screen.add_edit_todo.AddEditTodoState
+import nz.co.plantandfood.mvvmtodoapp.presentation.screen.add_edit_todo.AddEditTodoViewModel
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
@@ -40,8 +41,8 @@ fun AddEditToDoEventRoot(
 @Composable
 fun AddEditTodoScreen(
     todoState: AddEditTodoState,
-    uiEffect: Flow<UiEffect>,
-    onAction: (AddEditTodoAction) -> Unit,
+    uiEffect: Flow<AddEditTodoContract.Effect>,
+    onAction: (AddEditTodoContract.Action) -> Unit,
     onPopBackStack: () -> Unit
 ) {
 
@@ -50,11 +51,11 @@ fun AddEditTodoScreen(
     LaunchedEffect(key1 = true) {
         uiEffect.collect { effect ->
             when (effect) {
-                is UiEffect.PopBackStack -> {
+                is AddEditTodoContract.Effect.PopBackStack -> {
                     onPopBackStack()
 
                 }
-                is UiEffect.ShowSnackbar -> {
+                is AddEditTodoContract.Effect.ShowSnackbar -> {
 
                     snackbarHostState.showSnackbar(
                         message = effect.message,
@@ -62,7 +63,6 @@ fun AddEditTodoScreen(
                     )
                 }
 
-                else -> Unit
             }
         }
     }
@@ -74,7 +74,7 @@ fun AddEditTodoScreen(
             .padding(16.dp),
         floatingActionButton = {
             FloatingActionButton(onClick = {
-                onAction(AddEditTodoAction.OnSaveTodoClick)
+                onAction(AddEditTodoContract.Action.OnSaveTodoClick)
             }) {
                 Icon(
                     imageVector = Icons.Default.Check,
@@ -89,7 +89,7 @@ fun AddEditTodoScreen(
             TextField(
                 value = todoState.title,
                 onValueChange = {
-                    onAction(AddEditTodoAction.OnTitleChange(it))
+                    onAction(AddEditTodoContract.Action.OnTitleChange(it))
                 },
                 placeholder = {
                     Text(text = "Title")
@@ -100,7 +100,7 @@ fun AddEditTodoScreen(
             TextField(
                 value = todoState.description ,
                 onValueChange = {
-                    onAction(AddEditTodoAction.OnDescriptionChange(it))
+                    onAction(AddEditTodoContract.Action.OnDescriptionChange(it))
                 },
                 placeholder = {
                     Text(text = "Description")
