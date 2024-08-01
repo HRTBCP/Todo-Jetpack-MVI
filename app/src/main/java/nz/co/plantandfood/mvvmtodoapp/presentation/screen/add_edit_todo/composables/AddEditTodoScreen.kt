@@ -20,7 +20,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import kotlinx.coroutines.flow.Flow
 import nz.co.plantandfood.mvvmtodoapp.presentation.screen.add_edit_todo.AddEditTodoContract
-import nz.co.plantandfood.mvvmtodoapp.presentation.screen.add_edit_todo.AddEditTodoState
 import nz.co.plantandfood.mvvmtodoapp.presentation.screen.add_edit_todo.AddEditTodoViewModel
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -40,7 +39,7 @@ fun AddEditToDoEventRoot(
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun AddEditTodoScreen(
-    todoState: AddEditTodoState,
+    todoState: AddEditTodoContract.State,
     uiEffect: Flow<AddEditTodoContract.Effect>,
     onAction: (AddEditTodoContract.Action) -> Unit,
     onPopBackStack: () -> Unit
@@ -59,7 +58,8 @@ fun AddEditTodoScreen(
 
                     snackbarHostState.showSnackbar(
                         message = effect.message,
-                        actionLabel = effect.action
+                        actionLabel = effect.action,
+                        duration = effect.duration
                     )
                 }
 

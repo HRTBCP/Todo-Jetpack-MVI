@@ -19,8 +19,8 @@ class AddEditTodoViewModel @Inject constructor(
     private val repository: TodoRepository,
     savedStateHandle: SavedStateHandle
 ): ViewModel() {
-    private val initialState: AddEditTodoState by lazy {
-        AddEditTodoState()
+    private val initialState: AddEditTodoContract.State by lazy {
+        AddEditTodoContract.State()
     }
     var todoState by mutableStateOf(initialState)
         private set
@@ -31,7 +31,7 @@ class AddEditTodoViewModel @Inject constructor(
 
     init {
         val todoId = savedStateHandle.get<Int>("todoId")!!
-        todoState = AddEditTodoState()
+        todoState = AddEditTodoContract.State()
         if(todoId != -1) {
             viewModelScope.launch {
                 repository.getTodoById(todoId)?.let { todo ->

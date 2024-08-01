@@ -12,7 +12,7 @@ class TodoListContract {
         data class ShowSnackbar(
             val message: String,
             val action: String? = null,
-            var duration: SnackbarDuration = SnackbarDuration.Short
+            var duration: SnackbarDuration = SnackbarDuration.Long
         ): Effect()
     }
 

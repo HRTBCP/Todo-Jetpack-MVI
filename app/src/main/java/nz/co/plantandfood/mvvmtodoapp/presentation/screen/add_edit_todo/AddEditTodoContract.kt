@@ -1,6 +1,7 @@
 package nz.co.plantandfood.mvvmtodoapp.presentation.screen.add_edit_todo
 
 import androidx.compose.material3.SnackbarDuration
+import nz.co.plantandfood.mvvmtodoapp.domain.Todo
 
 class AddEditTodoContract {
 
@@ -19,4 +20,11 @@ class AddEditTodoContract {
         ): Effect()
     }
 
+
+    data class State(
+        val todo: Todo? = null,
+        val title: String = "",
+        val description: String = "",
+
+        )
 }

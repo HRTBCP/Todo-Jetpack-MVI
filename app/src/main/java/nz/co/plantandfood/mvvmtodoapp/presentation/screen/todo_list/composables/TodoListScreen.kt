@@ -47,18 +47,19 @@ fun TodoListScreen(
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
     LaunchedEffect(key1 = true) {
-        uiEffect.collect { event ->
-            when(event) {
+        uiEffect.collect { effect ->
+            when(effect) {
                 is TodoListContract.Effect.ShowSnackbar -> {
                     val result = snackbarHostState.showSnackbar(
-                        message = event.message,
-                        actionLabel = event.action
+                        message = effect.message,
+                        actionLabel = effect.action,
+                        duration = effect.duration
                     )
                     if(result == SnackbarResult.ActionPerformed) {
                         onAction(TodoListContract.Action.OnUndoDeleteClick)
                     }
                 }
-                is TodoListContract.Effect.Navigate ->onNavigationRequested(event)
+                is TodoListContract.Effect.Navigate ->onNavigationRequested(effect)
                 else -> Unit
             }
         }
