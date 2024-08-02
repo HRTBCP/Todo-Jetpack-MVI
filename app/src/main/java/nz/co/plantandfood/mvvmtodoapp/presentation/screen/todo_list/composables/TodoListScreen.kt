@@ -44,6 +44,7 @@ fun TodoListScreen(
     onNavigationRequested: (TodoListContract.Effect.Navigate) -> Unit
 
 ) {
+
     val snackbarHostState = remember { SnackbarHostState() }
     LaunchedEffect(key1 = true) {
         uiEffect.collect { effect ->
@@ -80,7 +81,8 @@ fun TodoListScreen(
         LazyColumn(
             modifier = Modifier.fillMaxSize()
         ) {
-            items(todoState.todos) { todo ->
+            items(todoState.todos, key = { it.id?: -1 }) { todo ->
+
                 TodoItem(
                     todo = todo,
                     onAction = onAction,

@@ -5,14 +5,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import nz.co.plantandfood.mvvmtodoapp.domain.Todo
-import nz.co.plantandfood.mvvmtodoapp.domain.TodoRepository
-import nz.co.plantandfood.mvvmtodoapp.presentation.util.Routes
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
-import nz.co.plantandfood.mvvmtodoapp.presentation.screen.add_edit_todo.AddEditTodoContract
+import nz.co.plantandfood.mvvmtodoapp.domain.TodoRepository
+import nz.co.plantandfood.mvvmtodoapp.presentation.util.Routes
 import javax.inject.Inject
 
 @HiltViewModel
@@ -31,6 +29,7 @@ class TodoListViewModel @Inject constructor(
                 todoState = todoState.copy(todos = todos)
             }
         }
+
     }
 
     private val _uiEffect =  Channel<TodoListContract.Effect>()
