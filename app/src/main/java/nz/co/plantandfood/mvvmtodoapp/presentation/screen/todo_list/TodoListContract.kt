@@ -6,6 +6,11 @@ import nz.co.plantandfood.mvvmtodoapp.presentation.util.Routes
 
 class TodoListContract {
 
+    data class State(
+        val lastDeletedTodo : Todo? = null,
+        val todos: List<Todo> = emptyList(),
+
+    )
     sealed class Effect {
 
         data class Navigate(val route: Routes.TodoEdit): Effect()

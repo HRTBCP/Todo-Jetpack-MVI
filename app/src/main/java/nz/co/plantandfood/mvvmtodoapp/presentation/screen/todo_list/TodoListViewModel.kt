@@ -1,5 +1,8 @@
 package nz.co.plantandfood.mvvmtodoapp.presentation.screen.todo_list
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import nz.co.plantandfood.mvvmtodoapp.domain.Todo
@@ -9,19 +12,31 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
+import nz.co.plantandfood.mvvmtodoapp.presentation.screen.add_edit_todo.AddEditTodoContract
 import javax.inject.Inject
 
 @HiltViewModel
 class TodoListViewModel @Inject constructor(
     private val repository: TodoRepository
 ): ViewModel() {
+    private val initialState: TodoListContract.State by lazy {
+        TodoListContract.State()
+    }
+    var todoState by mutableStateOf(initialState)
+        private set
 
-    val todos = repository.getTodos()
+    init {
+        viewModelScope.launch {
+            repository.getTodos().collect { todos ->
+                todoState = todoState.copy(todos = todos)
+            }
+        }
+    }
 
     private val _uiEffect =  Channel<TodoListContract.Effect>()
     val uiEffect = _uiEffect.receiveAsFlow()
 
-    private var deletedTodo: Todo? = null
+   // private var deletedTodo: Todo? = null
 
     fun onAction(action: TodoListContract.Action) {
         when(action) {
@@ -36,7 +51,7 @@ class TodoListViewModel @Inject constructor(
                 sendUiEffect(TodoListContract.Effect.Navigate(Routes.TodoEdit()))
             }
             is TodoListContract.Action.OnUndoDeleteClick -> {
-                deletedTodo?.let { todo ->
+                todoState.lastDeletedTodo?.let { todo ->
                     viewModelScope.launch {
                         repository.insertTodo(todo)
                     }
@@ -44,7 +59,7 @@ class TodoListViewModel @Inject constructor(
             }
             is TodoListContract.Action.OnDeleteTodoClick -> {
                 viewModelScope.launch {
-                    deletedTodo = action.todo
+                    todoState = todoState.copy(lastDeletedTodo = action.todo)
                     repository.deleteTodo(action.todo)
                     sendUiEffect(
                         TodoListContract.Effect.ShowSnackbar(

@@ -31,12 +31,10 @@ class AddEditTodoViewModel @Inject constructor(
 
     init {
         val todoId = savedStateHandle.get<Int>("todoId")!!
-        todoState = AddEditTodoContract.State()
         if(todoId != -1) {
             viewModelScope.launch {
                 repository.getTodoById(todoId)?.let { todo ->
                     todoState = todoState.copy(title = todo.title, description =  todo.description ?: "", todo  = todo)
-                   // this@AddEditTodoViewModel.todo = todo
                 }
             }
         }

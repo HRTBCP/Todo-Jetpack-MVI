@@ -12,11 +12,11 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import kotlinx.coroutines.flow.Flow
 import nz.co.plantandfood.mvvmtodoapp.domain.Todo
@@ -26,9 +26,8 @@ import nz.co.plantandfood.mvvmtodoapp.presentation.screen.todo_list.TodoListView
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun TodoListScreenRoot(navController: NavController, viewModel: TodoListViewModel = hiltViewModel()) {
-    val todos = viewModel.todos.collectAsState(initial = emptyList())
 
-    TodoListScreen(todos.value, viewModel::onAction, viewModel.uiEffect) {
+    TodoListScreen(viewModel.todoState, viewModel::onAction, viewModel.uiEffect) {
         navController.navigate(it.route)
     }
 
@@ -39,7 +38,7 @@ fun TodoListScreenRoot(navController: NavController, viewModel: TodoListViewMode
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun TodoListScreen(
-    todos: List<Todo>,
+    todoState: TodoListContract.State,
     onAction: (TodoListContract.Action) -> Unit,
     uiEffect: Flow<TodoListContract.Effect>,
     onNavigationRequested: (TodoListContract.Effect.Navigate) -> Unit
@@ -81,7 +80,7 @@ fun TodoListScreen(
         LazyColumn(
             modifier = Modifier.fillMaxSize()
         ) {
-            items(todos) { todo ->
+            items(todoState.todos) { todo ->
                 TodoItem(
                     todo = todo,
                     onAction = onAction,
