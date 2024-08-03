@@ -1,8 +1,5 @@
 package nz.co.plantandfood.mvvmtodoapp.presentation.screen.add_edit_todo
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -10,7 +7,10 @@ import nz.co.plantandfood.mvvmtodoapp.domain.Todo
 import nz.co.plantandfood.mvvmtodoapp.domain.TodoRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -19,12 +19,9 @@ class AddEditTodoViewModel @Inject constructor(
     private val repository: TodoRepository,
     savedStateHandle: SavedStateHandle
 ): ViewModel() {
-    private val initialState: AddEditTodoContract.State by lazy {
-        AddEditTodoContract.State()
-    }
-    var todoState by mutableStateOf(initialState)
-        private set
 
+    private var _todoS: MutableStateFlow<AddEditTodoContract.State> = MutableStateFlow(AddEditTodoContract.State())
+    val todoState = _todoS.asStateFlow()
 
     private val _uiEffect =  Channel<AddEditTodoContract.Effect>()
     val uiEffect = _uiEffect.receiveAsFlow()
@@ -34,7 +31,9 @@ class AddEditTodoViewModel @Inject constructor(
         if(todoId != -1) {
             viewModelScope.launch {
                 repository.getTodoById(todoId)?.let { todo ->
-                    todoState = todoState.copy(title = todo.title, description =  todo.description ?: "", todo  = todo)
+                    _todoS.update {
+                        it.copy(title = todo.title, description =  todo.description ?: "", todo  = todo)
+                    }
                 }
             }
         }
@@ -43,14 +42,19 @@ class AddEditTodoViewModel @Inject constructor(
     fun onAction(action: AddEditTodoContract.Action) {
         when(action) {
             is AddEditTodoContract.Action.OnTitleChange -> {
-                todoState = todoState.copy(title = action.title)
+                _todoS.update {
+                    it.copy(title = action.title)
+                }
             }
             is AddEditTodoContract.Action.OnDescriptionChange -> {
-                todoState = todoState.copy(description = action.description)
+                _todoS.update {
+                    it.copy(description = action.description)
+                }
             }
             is AddEditTodoContract.Action.OnSaveTodoClick -> {
+
                 viewModelScope.launch {
-                    if(todoState.title.isBlank()) {
+                    if(_todoS.value.title.isBlank()) {
                         sendUiEffect(
                             AddEditTodoContract.Effect.ShowSnackbar(
                             message = "The title can't be empty"
@@ -59,10 +63,10 @@ class AddEditTodoViewModel @Inject constructor(
                     }
                     repository.insertTodo(
                         Todo(
-                            title = todoState.title,
-                            description = todoState.description,
-                            isDone = todoState.todo?.isDone ?: false,
-                            id = todoState.todo?.id
+                            title = _todoS.value.title,
+                            description = _todoS.value.description,
+                            isDone = _todoS.value.todo?.isDone ?: false,
+                            id = _todoS.value.todo?.id
                         )
                     )
                     sendUiEffect(AddEditTodoContract.Effect.PopBackStack)

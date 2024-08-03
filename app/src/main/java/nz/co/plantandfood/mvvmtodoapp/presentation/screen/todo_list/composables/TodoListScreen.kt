@@ -1,4 +1,4 @@
-package nz.co.plantandfood.mvvmtodoapp.presentation.screen.todo_list.composables
+ package nz.co.plantandfood.mvvmtodoapp.presentation.screen.todo_list.composables
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.clickable
@@ -12,6 +12,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -19,15 +20,15 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import kotlinx.coroutines.flow.Flow
-import nz.co.plantandfood.mvvmtodoapp.domain.Todo
 import nz.co.plantandfood.mvvmtodoapp.presentation.screen.todo_list.TodoListContract
 import nz.co.plantandfood.mvvmtodoapp.presentation.screen.todo_list.TodoListViewModel
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun TodoListScreenRoot(navController: NavController, viewModel: TodoListViewModel = hiltViewModel()) {
+    val todoListState by viewModel.todoListState.collectAsStateWithLifecycle()
 
-    TodoListScreen(viewModel.todoState, viewModel::onAction, viewModel.uiEffect) {
+    TodoListScreen(todoListState, viewModel::onAction, viewModel.uiEffect) {
         navController.navigate(it.route)
     }
 
@@ -38,7 +39,7 @@ fun TodoListScreenRoot(navController: NavController, viewModel: TodoListViewMode
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun TodoListScreen(
-    todoState: TodoListContract.State,
+    todoListState: TodoListContract.State,
     onAction: (TodoListContract.Action) -> Unit,
     uiEffect: Flow<TodoListContract.Effect>,
     onNavigationRequested: (TodoListContract.Effect.Navigate) -> Unit
@@ -81,7 +82,7 @@ fun TodoListScreen(
         LazyColumn(
             modifier = Modifier.fillMaxSize()
         ) {
-            items(todoState.todos, key = { it.id?: -1 }) { todo ->
+            items(todoListState.todos, key = { it.id?: -1 }) { todo ->
 
                 TodoItem(
                     todo = todo,

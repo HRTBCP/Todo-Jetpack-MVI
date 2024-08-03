@@ -13,10 +13,12 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import kotlinx.coroutines.flow.Flow
 import nz.co.plantandfood.mvvmtodoapp.presentation.screen.add_edit_todo.AddEditTodoContract
@@ -29,7 +31,8 @@ fun AddEditToDoEventRoot(
     viewModel: AddEditTodoViewModel = hiltViewModel()
 ) {
 
-        AddEditTodoScreen(viewModel.todoState, viewModel.uiEffect, viewModel::onAction) {
+        val todoState by viewModel.todoState.collectAsStateWithLifecycle()
+        AddEditTodoScreen(todoState, viewModel.uiEffect, viewModel::onAction) {
             navController.popBackStack()
         }
 
